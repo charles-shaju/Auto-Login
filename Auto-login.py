@@ -1,4 +1,19 @@
 import subprocess
+import platform
+
+def is_connected():
+    # Use different ping parameter for Windows / Linux / macOS
+    param = "-n" if platform.system().lower() == "windows" else "-c"
+
+    try:
+        subprocess.check_output(
+            ["ping", param, "1", "8.8.8.8"],
+            stderr=subprocess.DEVNULL
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
+    
 
 def get_wifi_list():
     try:
@@ -21,4 +36,7 @@ def get_wifi_list():
         print("Exception occurred:", e)
 
 if __name__ == "__main__":
-    get_wifi_list()
+    if is_connected():
+        pass
+    else:
+        get_wifi_list()
